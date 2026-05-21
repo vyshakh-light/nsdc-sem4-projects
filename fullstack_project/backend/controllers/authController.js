@@ -1,3 +1,6 @@
+const{generateToken}=require('../utils/jwt');
+const bcrypt = require("bcrypt");
+const authRepository = require('../repositories/authRepository');
 exports.registerUser =async(req, res) => {
    try{
     const { username, email, password,phone } = req.body;
@@ -25,4 +28,36 @@ exports.registerUser =async(req, res) => {
         res.status(500).json({ message: "Server error" });
     }
    
-} 
+} ;
+exports.loginUser = async(req, res) => {
+  //validating user input
+    try{
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password are required" });
+        }
+    //checking if user exists
+        const user=await authRepository.findUserByEmail(email);
+        if (!user) {
+            return res.status(400).json({ message: "Invalid email or password" });
+        }
+    //comparing password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: "Invalid email or password" });
+        }
+    //token payload
+        const payload = { userId: user.id ,
+          email: user.email,
+          name: user.name
+        };
+    //generating JWT token
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        res.status(200).json({ token });
+
+    }
+    catch(error){
+    res.status(500).json({ message: "Server error" });
+    }
+}
+
