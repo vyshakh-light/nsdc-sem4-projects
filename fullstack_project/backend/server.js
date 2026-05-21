@@ -1,11 +1,14 @@
+//import express and other dependencies
 const express = require('express');
-const app = express();
+require("dotenv").config();
+const app=require('./app');
+const connectDB = require('./config/db');
+//connect to database
+connectDB();
+//middlewares to parse JSON
 app.use(express.json());
-
-// Sample route
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+//start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

@@ -1,6 +1,6 @@
 const{generateToken}=require('../utils/jwt');
 const bcrypt = require("bcrypt");
-const authRepository = require('../repositories/authRepository');
+const authRepository = require('../repository/authRepository');
 exports.registerUser =async(req, res) => {
    try{
     const { username, email, password,phone } = req.body;
