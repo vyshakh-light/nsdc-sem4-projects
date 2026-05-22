@@ -266,6 +266,44 @@
                 }
             }
         });
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('signup-name').value.trim();
+            const mobile = document.getElementById('signup-phone').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+
+            if (!name || !mobile || !email || !password) {
+                alert('Please complete all fields.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/v1/users/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name,
+                        mobile,
+                        email,
+                        password
+                    })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Registration failed');
+                }
+
+                window.location.href = 'success.html';
+            } catch (error) {
+                alert(error.message);
+            }
+        });
     </script>
 </body>
 </html>

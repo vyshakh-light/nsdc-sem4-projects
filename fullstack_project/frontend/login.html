@@ -430,12 +430,34 @@
 
         // --- 4. Form Validation Error Shake ---
         const form = document.getElementById('login-form');
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-password').value.trim();
 
             if (!email || !pass) {
-                e.preventDefault();
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/v1/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password: pass })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Login failed');
+                }
+
+                window.location.href = 'success.html';
+            } catch (error) {
+                alert(error.message);
                 card.classList.add('shake');
                 setTimeout(() => card.classList.remove('shake'), 400);
             }
