@@ -5,5 +5,5 @@ const userRoutes=require("./routes/authRoute");
 app.use(cors());
 app.use(express.json());                    
 app.use(express.urlencoded({ extended: true }))
-app.use("/users",userRoutes);
+app.use("/api/v1/users",userRoutes);
 module.exports=app;
