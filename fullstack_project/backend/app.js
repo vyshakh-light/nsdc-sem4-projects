@@ -3,7 +3,12 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://nsdc-sem4-projects-t1fc-femvahbms-vyshakh-s-projects.vercel.app/', // your actual frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 app.options('*', cors());
 

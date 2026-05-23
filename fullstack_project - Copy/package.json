@@ -1,0 +1,12 @@
+{
+  "name": "fullstack_project",
+  "version": "1.0.0",
+  "description": "Unified root for frontend and backend",
+  "scripts": {
+    "install-all": "cd backend && npm install",
+    "server": "cd backend && npm run dev",
+    "start": "npm run server"
+  },
+  "author": "",
+  "license": "ISC"
+}
