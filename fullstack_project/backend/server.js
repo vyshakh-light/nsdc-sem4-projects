@@ -1,34 +1,9 @@
-require("dotenv").config();
+const express = require("express");
 
-const app = require("./app");
-const connectDB = require("./config/db");
+const app = express();
 
-let isConnected = false;
+app.get("/", (req, res) => {
+    res.send("SERVER WORKING");
+});
 
-const connectDatabase = async () => {
-
-    if (isConnected) return;
-
-    await connectDB();
-
-    isConnected = true;
-};
-
-module.exports = async (req, res) => {
-
-    try {
-
-        await connectDatabase();
-
-        return app(req, res);
-
-    } catch (error) {
-
-        console.error("SERVER ERROR:", error);
-
-        res.status(500).json({
-            message: "Internal Server Error",
-            error: error.message
-        });
-    }
-};
+module.exports = app;
