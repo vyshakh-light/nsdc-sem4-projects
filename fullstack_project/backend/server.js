@@ -1,12 +1,34 @@
-//import express and other dependencies
-const express = require('express');
 require("dotenv").config();
 
-const app = require('./app');
-const connectDB = require('./config/db');
+const app = require("./app");
+const connectDB = require("./config/db");
 
-//connect to database
-connectDB();
+let isConnected = false;
 
-//export app for Vercel
-module.exports = app;
+const connectDatabase = async () => {
+
+    if (isConnected) return;
+
+    await connectDB();
+
+    isConnected = true;
+};
+
+module.exports = async (req, res) => {
+
+    try {
+
+        await connectDatabase();
+
+        return app(req, res);
+
+    } catch (error) {
+
+        console.error("SERVER ERROR:", error);
+
+        res.status(500).json({
+            message: "Internal Server Error",
+            error: error.message
+        });
+    }
+};
