@@ -54,21 +54,38 @@ exports.loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!user.password) {
+      return res.status(500).json({ message: 'Stored password is missing for this user' });
+    }
+
+    let isPasswordValid = false;
+    try {
+      isPasswordValid = await bcrypt.compare(password, user.password);
+    } catch (compareError) {
+      console.error('bcrypt compare error:', compareError);
+      return res.status(500).json({ message: 'Password verification failed', error: compareError.message });
+    }
+
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    const token = generateToken({
-      userId: user.id,
-      email: user.email,
-      username: user.username,
-    });
+    let token;
+    try {
+      token = generateToken({
+        userId: user.id,
+        email: user.email,
+        username: user.username,
+      });
+    } catch (tokenError) {
+      console.error('JWT generation error:', tokenError);
+      return res.status(500).json({ message: 'Token generation failed', error: tokenError.message });
+    }
 
     return res.status(200).json({ token });
   } catch (error) {
     console.error('Login error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 

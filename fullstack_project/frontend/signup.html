@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,8 +42,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h2 {
@@ -134,7 +142,7 @@
         .constraint-item.valid {
             color: #10b981;
         }
-        
+
         .constraint-item.valid::before {
             content: "✓";
             font-weight: bold;
@@ -188,13 +196,14 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="auth-container">
         <div class="auth-card">
             <h2>Create account</h2>
             <p class="subtitle">Get started with your free account today.</p>
-            
+
             <form action="success.html" id="signup-form">
                 <div class="input-group">
                     <label for="signup-name">Full Name</label>
@@ -206,8 +215,8 @@
                     <label for="signup-phone">Mobile Number</label>
                     <div class="phone-input-container">
                         <input type="text" class="phone-prefix" value="+1" readonly tabindex="-1">
-                        <input type="tel" id="signup-phone" placeholder="555-0123" required 
-                               pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" autocomplete="tel">
+                        <input type="tel" id="signup-phone" placeholder="555-0123" required pattern="[0-9]{10}"
+                            title="Please enter a valid 10-digit mobile number" autocomplete="tel">
                     </div>
                 </div>
 
@@ -215,13 +224,14 @@
                     <label for="signup-email">Email Address</label>
                     <input type="email" id="signup-email" placeholder="name@example.com" required autocomplete="email">
                 </div>
-                
+
                 <!-- UPDATED: Password with strict pattern validation attributes -->
                 <div class="input-group">
                     <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" placeholder="••••••••" required autocomplete="new-password"
-                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]).{8,}"
-                           title="Password must meet all complexity requirements listed below.">
+                    <input type="password" id="signup-password" placeholder="••••••••" required
+                        autocomplete="new-password"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]).{8,}"
+                        title="Password must meet all complexity requirements listed below.">
                 </div>
 
                 <!-- NEW: Dynamic Password Constraints Checklist -->
@@ -232,10 +242,10 @@
                     <div class="constraint-item" id="number">At least one number (0-9)</div>
                     <div class="constraint-item" id="special">At least one special character (!@#$...)</div>
                 </div>
-                
+
                 <button type="submit" class="btn">Create Account</button>
             </form>
-            
+
             <div class="auth-footer">
                 Already have an account? <a href="login.html">Sign in</a>
             </div>
@@ -244,7 +254,7 @@
 
     <script>
         const passwordInput = document.getElementById('signup-password');
-        
+
         const constraints = {
             length: (str) => str.length >= 8,
             uppercase: (str) => /[A-Z]/.test(str),
@@ -253,9 +263,9 @@
             special: (str) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(str)
         };
 
-        passwordInput.addEventListener('input', function() {
+        passwordInput.addEventListener('input', function () {
             const val = passwordInput.value;
-            
+
             // Loop through constraints and toggle '.valid' class
             for (const key in constraints) {
                 const element = document.getElementById(key);
@@ -281,7 +291,7 @@
             }
 
             try {
-                const response = await fetch('http://localhost:5000/api/v1/users/register', {
+                const response = await fetch('/api/v1/users/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -306,4 +316,5 @@
         });
     </script>
 </body>
+
 </html>
