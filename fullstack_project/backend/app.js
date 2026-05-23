@@ -4,7 +4,11 @@ const path = require("path");
 const app = express();
 const userRoutes = require("./routes/authRoute");
 
-app.use(cors());
+app.use(cors({
+    origin: "https://nsdc-sem4-projects-t1fc-6racxqxl5-vyshakh-s-projects.vercel.app",
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
