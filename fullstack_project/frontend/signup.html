@@ -253,45 +253,52 @@
     </div>
 
     <script>
-        const passwordInput = document.getElementById('signup-password');
+    const passwordInput = document.getElementById('signup-password');
 
-        const constraints = {
-            length: (str) => str.length >= 8,
-            uppercase: (str) => /[A-Z]/.test(str),
-            lowercase: (str) => /[a-z]/.test(str),
-            number: (str) => /[0-9]/.test(str),
-            special: (str) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(str)
-        };
+    const constraints = {
+        length: (str) => str.length >= 8,
+        uppercase: (str) => /[A-Z]/.test(str),
+        lowercase: (str) => /[a-z]/.test(str),
+        number: (str) => /[0-9]/.test(str),
+        special: (str) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(str)
+    };
 
-        passwordInput.addEventListener('input', function () {
-            const val = passwordInput.value;
+    passwordInput.addEventListener('input', function () {
 
-            // Loop through constraints and toggle '.valid' class
-            for (const key in constraints) {
-                const element = document.getElementById(key);
-                if (constraints[key](val)) {
-                    element.classList.add('valid');
-                } else {
-                    element.classList.remove('valid');
-                }
+        const val = passwordInput.value;
+
+        for (const key in constraints) {
+
+            const element = document.getElementById(key);
+
+            if (constraints[key](val)) {
+                element.classList.add('valid');
+            } else {
+                element.classList.remove('valid');
             }
-        });
+        }
+    });
 
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
 
-            const name = document.getElementById('signup-name').value.trim();
-            const mobile = document.getElementById('signup-phone').value.trim();
-            const email = document.getElementById('signup-email').value.trim();
-            const password = document.getElementById('signup-password').value;
+        e.preventDefault();
 
-            if (!name || !mobile || !email || !password) {
-                alert('Please complete all fields.');
-                return;
-            }
+        const name = document.getElementById('signup-name').value.trim();
+        const mobile = document.getElementById('signup-phone').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const password = document.getElementById('signup-password').value;
 
-            try {
-                const response = await fetch('/api/v1/users/register', {
+        if (!name || !mobile || !email || !password) {
+
+            alert('Please complete all fields.');
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                'https://nsdc-sem4-projects-t1fc-8xpcy9i8x-vyshakh-s-projects.vercel.app/users/register',
+                {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -302,19 +309,29 @@
                         email,
                         password
                     })
-                });
-
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.message || 'Registration failed');
                 }
+            );
+
+            const data = await response.json();
+
+            if(response.ok){
+
+                alert("Registration Successful!");
 
                 window.location.href = 'success.html';
-            } catch (error) {
-                alert(error.message);
+
+            } else {
+
+                alert(data.message || 'Registration failed');
             }
-        });
-    </script>
+
+        } catch (error) {
+
+            console.log(error);
+            alert('Server Error');
+        }
+    });
+</script>
 </body>
 
 </html>
